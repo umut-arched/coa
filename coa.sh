@@ -1,31 +1,28 @@
 #!/bin/bash
 var1=$1
 var2=$2
+script_path=$(dirname "$0")
+
+setupFolder() {
+	local framework=$1
+	local name=$2
+	echo creating $framework project named $name
+	unzip $script_path/templates/$framework -d $name > /dev/null 2>&1
+	cd $name
+	npm rebuild
+	echo finished setting up new $framework project named $name
+}
+
 if [ -z "$var2" ]
 then
       echo "invalid project name!"
 else
-	if [ "$var1" = "react" ]; then
-		echo creating $var1 project named $var2
-		unzip ./coa/templates/react.zip -d $var2 > /dev/null 2>&1
-		cd $var2
-		npm rebuild
-		echo finished creating $var2
-
+	if [[ "$var1" = "react" ]]; then
+		setupFolder $var1 $var2	
 	elif [[ "$var1" = "vue" ]]; then
-		echo creating $var1 project named $var2
-		unzip ./coa/templates/vue.zip -d $var2 > /dev/null 2>&1
-		cd $var2
-		npm rebuild
-		echo finished creating $var2
-
+		setupFolder $var1 $var2	
 	elif [[ "$var1" = "angular" ]]; then
-		echo creating $var1 project named $var2
-		#echo $(pwd)/coa/templates
-		unzip ./coa/templates/angular.zip -d $var2 > /dev/null 2>&1
-		cd $var2
-		npm rebuild
-		echo finished creating $var2	
+		setupFolder $var1 $var2
 	else
 		echo invalid framework name!
 	fi
